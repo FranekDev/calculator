@@ -8,6 +8,9 @@ const calc = document.querySelector('.calc');
 
 let operator = '';
 let wasNumber = false;
+let firstNumber = null;
+let secondNumber = null;
+let calculate = false;
 
 clearBtn.addEventListener('click', clear);
 
@@ -34,13 +37,15 @@ operationBtn.forEach((button) =>
             lastOperation.textContent += currentOperation.textContent;
             currentOperation.textContent = '';
             operator = button.value;
-            console.log(operator);
         }
     })
 );
 
 removeBtn.addEventListener('click', () => {
     currentOperation.textContent = currentOperation.textContent.toString().slice(0, -1);
+    if(currentOperation.textContent.length === 0) {
+        wasNumber = false;
+    }
 });
 
 calc.addEventListener('click', () => {
@@ -49,45 +54,49 @@ calc.addEventListener('click', () => {
 });
 
 function operate(operator, lastOperation, currentOperation) {
-    lastOperation = parseInt(lastOperation, 10);
-    currentOperation = parseInt(currentOperation, 10);
+
+    firstNumber = parseInt(lastOperation.textContent, 10);
+    secondNumber = parseInt(currentOperation.textContent, 10);
+    console.log(`${operator}, ${firstNumber}, ${secondNumber}`);
         
     switch(operator) {
 
         case '+':
-            add(lastOperation, currentOperation);
+            add(firstNumber, secondNumber);
         break;
 
         case '-':
-            subtract(lastOperation, currentOperation);
+            subtract(firstNumber, secondNumber);
         break;
 
         case '*':
-            multiply(lastOperation, currentOperation);
+            multiply(firstNumber, secondNumber);
         break;
 
         case '/':
-            divide(lastOperation, currentOperation);
+            divide(firstNumber, secondNumber);
         break;
 
     }
 }
 
 function add(a, b) {
-    console.log(a + b);
     currentOperation.textContent = a + b;
     return a + b;
 }
 
 function subtract(a, b) {
+    currentOperation.textContent = a - b;
     return a - b;
 }
 
 function multiply(a, b) {
+    currentOperation.textContent = a * b;
     return a * b;
 }
 
 function divide(a, b) {
+    currentOperation.textContent = a / b;
     return a / b;
 }
 
