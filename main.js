@@ -7,6 +7,13 @@ const operationBtn = document.querySelectorAll('.operationBtn');
 const calc = document.querySelector('.calc');
 const coma = document.querySelector('.coma');
 
+let operator = '';
+let firstNumber = null;
+let secondNumber = null;
+let wasNumber = false;
+let calculate = false;
+let shouldReset = false;
+
 coma.addEventListener('click', addComa);
 
 function addComa() {
@@ -22,18 +29,13 @@ function reduceTextSize() {
     }
 }
 
-let operator = '';
-let firstNumber = null;
-let secondNumber = null;
-let wasNumber = false;
-let calculate = false;
-let shouldReset = false;
 
 clearBtn.addEventListener('click', clear);
 
 function clear() {
     currentOperation.textContent = '';
     lastOperation.textContent = '';
+    wasNumber = false;
 }
 
 
@@ -54,8 +56,7 @@ operationBtn.forEach((button) =>
         else {        
             reset();
             calculate = true;
-            currentOperation.textContent += button.value;
-            lastOperation.textContent += currentOperation.textContent;
+            lastOperation.textContent += currentOperation.textContent + button.value;
             currentOperation.textContent = '';
             operator = button.value;
         }
@@ -99,7 +100,13 @@ function operate(operator, lastOperation, currentOperation) {
             divide(firstNumber, secondNumber);
         break;
 
+        case '^':
+            percent(firstNumber, secondNumber);
+        break;
+
     }
+
+    wasNumber = false;
 }
 
 function add(a, b) {
@@ -126,8 +133,14 @@ function divide(a, b) {
     return +firstNumber;
 }
 
-function percent() {
-
+function percent(a, b) {
+    let power = 1;
+    for(let i = 0; i < b; i++) {
+        power *= a;
+    }
+    currentOperation.textContent = power;
+    firstNumber = currentOperation.textContent;
+    return +firstNumber;
 }
 
 function reset() {
