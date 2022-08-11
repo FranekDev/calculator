@@ -16,31 +16,11 @@ let shouldReset = false;
 
 coma.addEventListener('click', addComa);
 
-function addComa() {
-    if(wasNumber) {
-        currentOperation.textContent = `${parseFloat(currentOperation.textContent, 10)}.`;
-        console.log('coma');
-    }
-}
-
-function reduceTextSize() {
-    if(currentOperation.textContent.length > 15) {
-        currentOperation.style.fontSize = '1.5vw';
-    }
-}
-
-
 clearBtn.addEventListener('click', clear);
-
-function clear() {
-    currentOperation.textContent = '';
-    lastOperation.textContent = '';
-    wasNumber = false;
-}
-
 
 numberBtn.forEach((button) =>
     button.addEventListener('click', () => {
+        currentOperation.style.fontSize = '27px';
         reduceTextSize();
         wasNumber = true;
         shouldReset = false;
@@ -50,16 +30,25 @@ numberBtn.forEach((button) =>
 
 operationBtn.forEach((button) => 
     button.addEventListener('click', () => {
+
+        if(calculate) {
+            lastOperation.textContent += currentOperation.textContent + button.value;
+            console.log('up');
+            calculate = false;
+        }
+
         if(!wasNumber) {
+            lastOperation.textContent = currentOperation.textContent;
             currentOperation.textContent = '';
         }
         else {        
             reset();
-            calculate = true;
-            lastOperation.textContent += currentOperation.textContent + button.value;
+            lastOperation.textContent = currentOperation.textContent + button.value;
+            operate(operator, lastOperation, currentOperation)
             currentOperation.textContent = '';
             operator = button.value;
         }
+
     })
 );
 
@@ -97,16 +86,22 @@ function operate(operator, lastOperation, currentOperation) {
         break;
 
         case '/':
+            if(secondNumber === 0) {
+                currentOperation.style.fontSize = '1.8vw';
+                currentOperation.textContent = 'Can\'t divide by 0!';
+                return;
+            }
             divide(firstNumber, secondNumber);
         break;
 
         case '^':
-            percent(firstNumber, secondNumber);
+            powerOf(firstNumber, secondNumber);
         break;
 
     }
 
     wasNumber = false;
+    calculate = true;
 }
 
 function add(a, b) {
@@ -133,7 +128,7 @@ function divide(a, b) {
     return +firstNumber;
 }
 
-function percent(a, b) {
+function powerOf(a, b) {
     let power = 1;
     for(let i = 0; i < b; i++) {
         power *= a;
@@ -148,4 +143,22 @@ function reset() {
         lastOperation.textContent = currentOperation.textContent;
         currentOperation.textContent = '';
     }
+}
+
+function addComa() {
+    if(wasNumber) {
+        currentOperation.textContent = `${parseFloat(currentOperation.textContent, 10)}.`;
+    }
+}
+
+function reduceTextSize() {
+    if(currentOperation.textContent.length > 15) {
+        currentOperation.style.fontSize = '1.5vw';
+    }
+}
+
+function clear() {
+    currentOperation.textContent = '';
+    lastOperation.textContent = '';
+    wasNumber = false;
 }
