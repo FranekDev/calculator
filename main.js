@@ -5,12 +5,29 @@ const clearBtn = document.querySelector('.clear');
 const removeBtn = document.querySelector('.remove');
 const operationBtn = document.querySelectorAll('.operationBtn');
 const calc = document.querySelector('.calc');
+const coma = document.querySelector('.coma');
+
+coma.addEventListener('click', addComa);
+
+function addComa() {
+    if(wasNumber) {
+        currentOperation.textContent = `${parseFloat(currentOperation.textContent, 10)}.`;
+        console.log('coma');
+    }
+}
+
+function reduceTextSize() {
+    if(currentOperation.textContent.length > 15) {
+        currentOperation.style.fontSize = '1.5vw';
+    }
+}
 
 let operator = '';
-let wasNumber = false;
 let firstNumber = null;
 let secondNumber = null;
+let wasNumber = false;
 let calculate = false;
+let shouldReset = false;
 
 clearBtn.addEventListener('click', clear);
 
@@ -22,7 +39,9 @@ function clear() {
 
 numberBtn.forEach((button) =>
     button.addEventListener('click', () => {
+        reduceTextSize();
         wasNumber = true;
+        shouldReset = false;
         currentOperation.textContent += button.value;
     })
 );
@@ -32,7 +51,9 @@ operationBtn.forEach((button) =>
         if(!wasNumber) {
             currentOperation.textContent = '';
         }
-        else {
+        else {        
+            reset();
+            calculate = true;
             currentOperation.textContent += button.value;
             lastOperation.textContent += currentOperation.textContent;
             currentOperation.textContent = '';
@@ -42,7 +63,7 @@ operationBtn.forEach((button) =>
 );
 
 removeBtn.addEventListener('click', () => {
-    currentOperation.textContent = currentOperation.textContent.toString().slice(0, -1);
+    currentOperation.textContent = currentOperation.textContent.slice(0, -1);
     if(currentOperation.textContent.length === 0) {
         wasNumber = false;
     }
@@ -51,12 +72,13 @@ removeBtn.addEventListener('click', () => {
 calc.addEventListener('click', () => {
     lastOperation.textContent += currentOperation.textContent + calc.value;
     operate(operator, lastOperation, currentOperation);
+    shouldReset = true;
 });
 
 function operate(operator, lastOperation, currentOperation) {
 
-    firstNumber = parseInt(lastOperation.textContent, 10);
-    secondNumber = parseInt(currentOperation.textContent, 10);
+    firstNumber = parseFloat(lastOperation.textContent, 10);
+    secondNumber = parseFloat(currentOperation.textContent, 10);
     console.log(`${operator}, ${firstNumber}, ${secondNumber}`);
         
     switch(operator) {
@@ -82,24 +104,35 @@ function operate(operator, lastOperation, currentOperation) {
 
 function add(a, b) {
     currentOperation.textContent = a + b;
-    return a + b;
+    firstNumber = currentOperation.textContent;
+    return +firstNumber;
 }
 
 function subtract(a, b) {
     currentOperation.textContent = a - b;
-    return a - b;
+    firstNumber = currentOperation.textContent;
+    return +firstNumber;
 }
 
 function multiply(a, b) {
     currentOperation.textContent = a * b;
-    return a * b;
+    firstNumber = currentOperation.textContent;
+    return +firstNumber;
 }
 
 function divide(a, b) {
     currentOperation.textContent = a / b;
-    return a / b;
+    firstNumber = currentOperation.textContent;
+    return +firstNumber;
 }
 
 function percent() {
 
+}
+
+function reset() {
+    if(shouldReset) {
+        lastOperation.textContent = currentOperation.textContent;
+        currentOperation.textContent = '';
+    }
 }
