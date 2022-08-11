@@ -16,7 +16,14 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #2F3E46;;
+    background-color: #2F3E46;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 95vh;
 }
 
 .container {
@@ -46,8 +53,11 @@ body {
 }
 
 .currentOperation {
-    height: 45px;
+    height: auto;
     font-size: 27px;
+    width: 252px;
+    word-wrap: break-word;
+    text-align: right;
 }
 
 .calc {
