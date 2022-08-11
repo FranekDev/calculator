@@ -48,12 +48,14 @@ main {
 }
 
 .lastOperation {
-    height: 25px;
+    min-height: 25px;
+    width: 250px;
     font-size: 15px;
+    text-align: right;
 }
 
 .currentOperation {
-    height: auto;
+    min-height: 40px;
     font-size: 27px;
     width: 252px;
     word-wrap: break-word;
