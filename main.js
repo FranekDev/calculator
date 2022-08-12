@@ -50,7 +50,7 @@ operationBtn.forEach((button) =>
 );
 
 function nextOperation() {
-    if(calculate){
+    if(calculate) {
         lastOperation.textContent += currentOperation.textContent;
     }
 }
@@ -136,14 +136,14 @@ function powerOf(a, b) {
     for(let i = 0; i < b; i++) {
         power *= a;
     }
-    
+
     currentOperation.textContent = power;
     firstNumber = parseFloat(currentOperation.textContent, 10);
     return firstNumber;
 }
 
 function addComa() {
-    if(wasNumber) {
+    if(wasNumber && currentOperation.textContent.indexOf('.') === -1) {
         currentOperation.textContent = `${parseFloat(currentOperation.textContent, 10)}.`;
     }
 }
